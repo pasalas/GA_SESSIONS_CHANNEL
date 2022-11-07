@@ -113,9 +113,9 @@ SELECT
           WHEN ga_sessions.dataset_id = 79571586 THEN 'MLM'
           WHEN ga_sessions.dataset_id = 108964616 THEN 'M3' END) AS Cuenta
 
-  , (CASE WHEN ( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('MOTORS','MOT') THEN 'MOTORS'
-          WHEN ( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('REAL_ESTATE') THEN 'REAL ESTATE'
-          WHEN ( SELECT MAX(value) FROM hits.customDimensions WHERE index=8 ) in ('SERVICES') THEN 'SERVICES' END) AS VERTICAL
+  , (CASE WHEN ( SELECT UPPER(MAX(value)) FROM hits.customDimensions WHERE index=8 ) in ('MOTORS','MOT') THEN 'MOTORS'
+          WHEN ( SELECT UPPER(MAX(value)) FROM hits.customDimensions WHERE index=8 ) in ('REAL_ESTATE') THEN 'REAL ESTATE'
+          WHEN ( SELECT UPPER(MAX(value)) FROM hits.customDimensions WHERE index=8 ) in ('SERVICES') THEN 'SERVICES' END) AS VERTICAL
 
   , (CASE WHEN (ga_sessions.dataset_id = 79572943 and geoNetwork.region = 'State of Sao Paulo') THEN 'SP'
           ELSE 'REST' END) AS Region
@@ -167,7 +167,7 @@ SELECT
 FROM ga_sessions
 , UNNEST(ga_sessions.hits) as hits
 
-WHERE ((SELECT MAX(value) FROM hits.customDimensions WHERE index=8) in ('MOTORS','MOT','REAL_ESTATE','SERVICES')) 
+WHERE ((SELECT UPPER(MAX(value)) FROM hits.customDimensions WHERE index=8) in ('MOTORS','MOT','REAL_ESTATE','SERVICES')) 
 
 GROUP BY 1,2,3,4,5,6,7,8
 
